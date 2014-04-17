@@ -19,13 +19,13 @@ Bundle 'https://github.com/sldobri/TabStatusLine.vim'
 
 
 
-let g:sl_left_separator      = '►'   "'⮀'
+let g:sl_left_separator      = '►'            "'⮀'
 
-let g:sl_right_separator     = '◄'   "'⮂'
+let g:sl_right_separator     = '◄'            "'⮂'
 
-let g:sl_left_sep            = '|'   "'⮁'
+let g:sl_left_sep            = '>'            "'⮁'
 
-let g:sl_right_sep           = '|'   "'⮃'
+let g:sl_right_sep           = '<'            "'⮃'
 
 
 
