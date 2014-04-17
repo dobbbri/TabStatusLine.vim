@@ -81,7 +81,7 @@ let g:sl_fmt_color_info       = 'guifg='.g:sl_color_fg.' guibg='. g:sl_color_bg_
 let g:sl_fmt_color_modified   = 'guifg='.g:sl_color_fg.' guibg='. g:sl_color_bg_info
 let g:sl_fmt_color_info_arrow = 'guifg='.g:sl_color_bg_info.' guibg='.g:sl_color_bg_statusline
 
-`let g:sl_fmt_color_statusline = 'gui=NONE guifg='.g:sl_color_bg_info.' guibg='.g:sl_color_bg_statusline
+let g:sl_fmt_color_statusline = 'gui=NONE guifg='.g:sl_color_bg_info.' guibg='.g:sl_color_bg_statusline
 
 function! SetSLColorscheme()
   exec 'hi User1 '.g:sl_fmt_color_normal
