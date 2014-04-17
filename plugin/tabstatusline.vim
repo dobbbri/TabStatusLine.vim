@@ -76,11 +76,12 @@ let g:sl_arrow_color_insert   = 'guifg='.g:sl_color_bg_info.' guibg='.g:sl_color
 let g:sl_arrow_color_visual   = 'guifg='.g:sl_color_bg_info.' guibg='.g:sl_color_bg_visual.' gui=reverse'
 let g:sl_arrow_color_replace  = 'guifg='.g:sl_color_bg_info.' guibg='.g:sl_color_bg_replace.' gui=reverse'
 
-let g:sl_fmt_color_line       = 'guifg='.g:sl_color_bg_statusline.' guibg='.g:sl_color_bg_statusline
+let g:sl_fmt_color_line       = 'guifg='.g:sl_color_bg_info.' guibg='.g:sl_color_bg_statusline
 let g:sl_fmt_color_info       = 'guifg='.g:sl_color_fg.' guibg='. g:sl_color_bg_info
 let g:sl_fmt_color_modified   = 'guifg='.g:sl_color_fg.' guibg='. g:sl_color_bg_info
 let g:sl_fmt_color_info_arrow = 'guifg='.g:sl_color_bg_info.' guibg='.g:sl_color_bg_statusline
-let g:sl_fmt_color_statusline = 'gui=NONE guibg='.g:sl_color_bg_statusline.' guifg='.g:sl_color_bg_statusline
+
+`let g:sl_fmt_color_statusline = 'gui=NONE guifg='.g:sl_color_bg_info.' guibg='.g:sl_color_bg_statusline
 
 function! SetSLColorscheme()
   exec 'hi User1 '.g:sl_fmt_color_normal
@@ -97,7 +98,11 @@ function! SetSLColorscheme()
   exec 'hi TabLineSel '.g:sl_fmt_color_normal
   exec 'hi TabLineDivider  '.g:tl_fmt_color_normal
   exec 'hi TabLineDividerSel '.g:tl_arrow_color_normal
-endfunc
+endfunction
+
+function! Path()
+  return expand("%:h")
+endfunction
 
 function! Mode()
   redraw
@@ -163,8 +168,8 @@ if has('statusline')
     let &stl.=g:sl_left_separator
     let &stl.="%0*"
 
-    " file path
-    let &stl.="%6* %<%f %0*"
+    " filename
+    let &stl.="%6* %<%t %0*"
 
     " read only, modified, modifiable flags in brackets
     let &stl.="%7*%{&modified ? '+':''}%0*"
@@ -178,6 +183,9 @@ if has('statusline')
     let &stl.="%8*"
     let &stl.=g:sl_left_separator
     let &stl.="%0*"
+
+    " relative paht
+    let &stl.="%5* %<%{Path()} %0*"
 
     " right-aligh everything past this point
     let &stl.="%5*%= %0*"
