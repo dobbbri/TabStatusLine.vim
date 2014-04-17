@@ -5,6 +5,7 @@ TabLine and StatusLine with simple configurations.
 
 Put in .vimrc:
 
+set encoding=utf-8              " Necessary to show Unicode glyphs
 
 set guioptions=                 " Remove all, toolbar, menu etc..
 
