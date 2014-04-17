@@ -6,9 +6,9 @@ TabLine and StatusLine with simple configurations.
 Put in .vimrc:
 
 
-set guioptions=                 " Remove tudo, toolbar, menu etc..
+set guioptions=                 " Remove all, toolbar, menu etc..
 
-set showtabline=2               " 1=exibe qdo tiver +d 1 tab, 2=sempre exibe
+set showtabline=2               " Always show the tabline
 
 set laststatus=2                " Always show the statusline
 
