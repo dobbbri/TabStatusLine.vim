@@ -1,8 +1,8 @@
 
-if (exists("g:loaded_tabline_vim") && g:loaded_tabline_vim) || &cp
+if (exists("g:loaded_tabstatusline_vim") && g:loaded_tabstatusline_vim) || &cp
   finish
 endif
-let g:loaded_tabline_vim = 1
+let g:loaded_tabstatusline_vim = 1
 
 if !exists("g:sl_left_separator")  |let g:sl_left_separator      = '►'|endif
 if !exists("g:sl_right_separator") |let g:sl_right_separator     = '◄' |endif
