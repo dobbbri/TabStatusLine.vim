@@ -1,8 +1,8 @@
 
-if (exists("g:loaded_tabstatusline_vim") && g:loaded_tabstatusline_vim) || &cp
+if (exists("g:loaded_tabline_vim") && g:loaded_tabline_vim) || &cp
   finish
 endif
-let g:loaded_tabstatusline_vim = 1
+let g:loaded_tabline_vim = 1
 
 if !exists("g:sl_left_separator")  |let g:sl_left_separator      = '►'|endif
 if !exists("g:sl_right_separator") |let g:sl_right_separator     = '◄' |endif
@@ -18,7 +18,8 @@ if !exists("g:sl_color_bg_replace")    |let g:sl_color_bg_replace    = 'tomato1'
 if !exists("g:sl_color_bg_statusline") |let g:sl_color_bg_statusline = '#3C444C' |endif
 
 function! Tabline()
-  let s = ''
+  let tb =''
+
   for i in range(tabpagenr('$'))
     let tab = i + 1
     let winnr = tabpagewinnr(tab)
@@ -27,27 +28,38 @@ function! Tabline()
     let bufname = bufname(bufnr)
     let bufmodified = getbufvar(bufnr, "&mod")
 
-    let s .= '%' . tab . 'T'
-    let s .= (tab == tabpagenr() ? '%#TabLineSel#' : '%#TabLine#')
-    let s .= ' ' . tab
+    let tb .= '%' . tab . 'T'
+    let tb .= (tab == tabpagenr() ? '%#TabLineSel#' : '%#TabLine#')
+    let tb .= ' ' . tab
 
-    let s .= ' '
-    let s .= (bufname != '' ?  fnamemodify(bufname, ':t')  : '         ')
-    let s .= ' '
+    let tb .= ' '
+    let tb .= (bufname != '' ?  fnamemodify(bufname, ':t')  : '         ')
+    let tb .= ' '
 
     if (tab == tabpagenr() || (tab + 1) == tabpagenr())
-      let s .= '%#TabLineDivider'
-      let s .= (tab == tabpagenr() ? 'Sel' : '')
-      let s .= '#'.g:sl_left_separator
+      let tb .= '%#TabLineDivider'
+      let tb .= (tab == tabpagenr() ? 'Sel' : '')
+      let tb .= '#'.g:sl_left_separator
     elseif tab != tabpagenr('$')
-      let s .= '%#TabLine#'.g:sl_left_sep
+      let tb .= '%#TabLine#'.g:sl_left_sep
     endif
 
   endfor
 
-  let s .= '%#TabLineFill#'
-  return s
+  let tb .= '%#TabLineFill#'
+
+  " codrs
+  let tb .="%3*%= co%0*"
+  let tb .="%4*dr%0*"
+  let tb .="%3*s %0*"
+
+  return tb
 endfunction
+
+function! Time()
+  return strftime("%H:%M")
+endfunction
+
 set tabline=%!Tabline()
 
 set ls=2
@@ -55,6 +67,9 @@ let g:last_mode=''              "⭠
 
 exec 'hi TabLine guifg='.g:sl_color_bg_info.' guibg='.g:sl_color_bg_statusline.' gui=none'
 exec 'hi TabLineFill guifg='.g:sl_color_bg_statusline.' guibg='.g:sl_color_bg_statusline
+
+let g:cd_fmt_color_black     = 'guifg=#ffffff guibg='.g:sl_color_bg_statusline
+let g:cd_fmt_color_green     = 'guifg='.g:sl_color_bg_statusline.' guibg=#8BDD31 '
 
 let g:tl_fmt_color_normal    = 'guifg='.g:sl_color_bg_statusline.' guibg='.g:sl_color_bg_normal
 let g:tl_fmt_color_insert    = 'guifg='.g:sl_color_bg_statusline.' guibg='.g:sl_color_bg_insert
@@ -87,6 +102,9 @@ function! SetSLColorscheme()
   exec 'hi User1 '.g:sl_fmt_color_normal
   exec 'hi User2 '.g:sl_arrow_color_normal
 
+  exec 'hi User3 '.g:cd_fmt_color_black
+  exec 'hi User4 '.g:cd_fmt_color_green
+
   exec 'hi User5 '.g:sl_fmt_color_line
   exec 'hi User6 '.g:sl_fmt_color_info
   exec 'hi User7 '.g:sl_fmt_color_modified
@@ -101,7 +119,7 @@ function! SetSLColorscheme()
 endfunction
 
 function! Path()
-  return expand("%:h")
+  return substitute(expand("%:p:h"),$HOME,'~','')
 endfunction
 
 function! Mode()
@@ -162,67 +180,68 @@ if has('statusline')
     let &stl=""
 
     " mode (changes color)
-    let &stl.="%1* %{Mode()} %0*"
+    let &stl .= "%1* %{Mode()} %0*"
     " separador
-    let &stl.="%2*"
-    let &stl.=g:sl_left_separator
-    let &stl.="%0*"
+    let &stl .= "%2*"
+    let &stl .= g:sl_left_separator
+    let &stl .= "%0*"
 
     " filename
-    let &stl.="%6* %<%t %0*"
+    let &stl .= "%6* %t %0*"
 
     " read only, modified, modifiable flags in brackets
-    let &stl.="%7*%{&modified ? '+':''}%0*"
+    let &stl .= "%7*%{&modified ? '+':''}%0*"
 
     " readonly flag
-    let &stl.="%7*%{(&ro!=0?'⭤':'')}%0*"
+    let &stl .= "%7*%{(&ro!=0?'⭤':'')}%0*"
 
-    let &stl.="%7* %0*"
+    let &stl .= "%7* %0*"
 
     " separador
-    let &stl.="%8*"
-    let &stl.=g:sl_left_separator
-    let &stl.="%0*"
+    let &stl .= "%8*"
+    let &stl .= g:sl_left_separator
+    let &stl .= "%0*"
 
     " relative paht
-    let &stl.="%5* %<%{Path()} %0*"
+    let &stl .= "%5* %<%{Path()} %0*"
 
     " right-aligh everything past this point
-    let &stl.="%5*%= %0*"
+    let &stl .= "%5*%= %0*"
 
     " separador
-    let &stl.="%8*"
-    let &stl.=g:sl_right_separator
-    let &stl.="%0*"
+    let &stl .= "%8*"
+    let &stl .= g:sl_right_separator
+    let &stl .= "%0*"
 
     " file type (eg. python, ruby, etc..)
-    let &stl.="%6*%( %{&filetype}%)%0*"
+    let &stl .= "%6*%( %{&filetype}%)%0*"
 
     " file format (eg. unix, dos, etc..)
-    " let &stl.="%6*%{&fileformat} %0*"
+    " let &stl .= "%6*%{&fileformat} %0*"
     " separador
-    let &stl.="%6* "
-    let &stl.=g:sl_right_sep
-    let &stl.=" %0*"
+    let &stl .= "%6* "
+    let &stl .= g:sl_right_sep
+    let &stl .= " %0*"
 
     " file encoding (eg. utf8, latin1, etc..)
-    let &stl.="%6*%{(&fenc!=''?&fenc:&enc)} %0*"
+    let &stl .= "%6*%{(&fenc!=''?&fenc:&enc)} %0*"
 
     " separador
-    let &stl.="%2*"
-    let &stl.=g:sl_right_separator
-    let &stl.="%0*"
+    let &stl .= "%2*"
+    let &stl .= g:sl_right_separator
+    let &stl .= "%0*"
 
     " percentage done
-    let &stl.="%1* %p%%%0*"
+    let &stl .= "%1* %p%%%0*"
 
     " separador
-    let &stl.="%1* "
-    let &stl.=g:sl_right_sep
-    let &stl.=" %0*"
+    let &stl .= "%1* "
+    let &stl .= g:sl_right_sep
+    let &stl .= " %0*"
 
-    "line number / total lines
-    let &stl.="%1*⭡ %c:%l %0*"
+    "line number / column relative
+    let &stl .= "%1*⭡ %c:%l %0*"
+
   endfunc
 
   if !has('gui_running')
